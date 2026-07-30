@@ -12,30 +12,29 @@ import java.util.List;
  * ใช้เป็นตู้กดน้ำขนาดเล็ก เก็บได้ไม่เกิน 20 ขวด
  * 
  */
+/**
+ * Abstraction Function: (Bottles,capacity)  
+ *   Stack ของขวดน้ำ โดยเรียงจากล่างขึ้นบนตามตำแหน่ง 0, 1, ..., bottles.size()-1 ใน bottles
+ *   ซึ่ง bottles.get(bottles.size()-1) คือขวดน้ำอยู่บนสุด
+ *   และ capacity คือจำนวนขวดน้ำสูงสุดที่ชั้นรับคืนนี้เก็บได้ (ความจุของตู้กดน้ำ)
+ * 
+ * Representation Invariant:
+ *    -bottles ต้องไม่เป็นค่าว่าง
+ *    -capacity ต้องมากกว่า 0 และไม่เกิน MAX_BOTTLES
+ *    -จำนวนขวดน้ำที่เก็บอยู่ใน bottles ต้องไม่เกิน capacity
+ *    -ทุกค่าใน bottles ต้องไม่เป็น null
+ */    
 public class BoundedStack {
     public static final int MAX_BOTTLES = 20;
     private final List<Integer> bottles;
     private final int capacity;
-
-    /**
-     * Abstraction Function: (Bottles,capacity)  
-     *    Stack ของขวดน้ำ โดยเรียงจากล่างขึ้นบนตามตำแหน่ง 0, 1, ..., bottles.size()-1 ใน bottles
-     *    ซึ่ง bottles.get(bottles.size()-1) คือขวดน้ำอยู่บนสุด
-     *    และ capacity คือจำนวนขวดน้ำสูงสุดที่ชั้นรับคืนนี้เก็บได้ (ความจุของตู้กดน้ำ)
-    
-     * Representation Invariant:
-     *    -bottles ต้องไม่เป็นค่าว่าง
-     *    -capacity ต้องมากกว่า 0 และไม่เกิน MAX_BOTTLES
-     *    -จำนวนขวดน้ำที่เก็บอยู่ใน bottles ต้องไม่เกิน capacity
-     *    -ทุกค่าใน bottles ต้องไม่เป็น null
-     */
     
     private void checkRep() {
-        assert bottles != null : "bottles ต้องไม่เป็นค่าว่าง";
-        assert capacity > 0 && capacity <= MAX_BOTTLES : "capacity ต้องมากกว่า 0 และไม่เกิน MAX_BOTTLES";
-        assert bottles.size() <= capacity : "จำนวนขวดน้ำใน bottles ต้องไม่เกิน capacity";
+        assert bottles != null : "bottles must not be null";
+        assert capacity > 0 && capacity <= MAX_BOTTLES : "capacity must be positive and not exceed MAX_BOTTLES";
+        assert bottles.size() <= capacity : "number of bottles in bottles must not exceed capacity";
         for (Integer bottle : bottles) {
-            assert bottle != null : "ทุกค่าใน bottles ต้องไม่เป็น null";
+            assert bottle != null : "all values in bottles must not be null";
         }
     }
 
@@ -43,11 +42,11 @@ public class BoundedStack {
      * creator 1 สร้าง BoundedStack ที่มีความจุตามที่กำหนด
      * 
      * @param capacity จำนวนขวดน้ำสูงสุดที่ตู้กดน้ำเก็บได้
-     * @throws IllegalArgumentException ถ้า capacity <= 0
+     * @throws IllegalArgumentException ถ้า capacity <= 0 หรือมากกว่า MAX_BOTTLES
      */
-    public BoundedStack(Integer capacity) {
+    public BoundedStack(int capacity) {
         if (capacity <= 0 || capacity > MAX_BOTTLES) {
-            throw new IllegalArgumentException("capacity ต้องมากกว่า 0 และไม่เกิน MAX_BOTTLES");
+            throw new IllegalArgumentException("capacity must be positive and not exceed MAX_BOTTLES");
         }
         this.bottles = new ArrayList<>();
         this.capacity = capacity;
@@ -62,8 +61,8 @@ public class BoundedStack {
      * @throws IllegalArgumentException ถ้าตู้กดน้ำเต็มแล้ว
      */
     public void push(Integer bottle) {
-        if (bottle == null) throw new IllegalArgumentException("ขวดน้ำไม่สามารถเป็น null ได้");
-        if (bottles.size() >= capacity) throw new IllegalArgumentException("ตู้กดน้ำเต็มแล้ว เพิ่มขวดน้ำไม่ได้แล้วนะจ้ะ");
+        if (bottle == null) throw new IllegalArgumentException("bottle must not be null");
+        if (bottles.size() >= capacity) throw new IllegalArgumentException("dispenser is full, cannot add more bottles");
         bottles.add(bottle);
         checkRep();
     }
@@ -76,7 +75,7 @@ public class BoundedStack {
      */
     public Integer pop() {
         if (bottles.isEmpty()) {
-            throw new IllegalStateException("ตู้กดน้ำว่างแล้ว กดมาน้ำก็ไม่ออกจ้า");
+            throw new IllegalStateException("dispenser is empty, cannot remove a bottle");
         }
         Integer bottle = bottles.remove(bottles.size() - 1);
         checkRep();
@@ -84,14 +83,14 @@ public class BoundedStack {
     }
 
     /**
-     * Observer 1 เรียกดูขวดน้ำในตู้กดน้ำ (จำนวนขวดน้ำที่เก็บอยู่)
+     * Observer 1 คืนค่าขวดน้ำที่อยู่บนสุดโดยไม่นำออก
      * 
-     * @return ขนาดของตู้กดน้ำ
+     * @return ขวดน้ำบนสุด
      * @throws IllegalStateException ถ้าตู้กดน้ำว่าง
      */
     public Integer peek() {
         if (bottles.isEmpty())
-            throw new IllegalStateException("ตู้กดน้ำว่างแล้ว ไม่มีน้ำให้ดูนะจ้ะ");
+            throw new IllegalStateException("dispenser is empty, cannot peek at a bottle");
         return bottles.get(bottles.size() - 1);
     }
 
@@ -120,7 +119,7 @@ public class BoundedStack {
      */
     public BoundedStack copy() {
         BoundedStack copy = new BoundedStack(this.capacity);
-        for (Integer bottle : this.bottles) {
+        for (int bottle : this.bottles) {
             copy.push(bottle);
         }
         return copy;
