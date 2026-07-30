@@ -63,7 +63,7 @@ public class BoundedStack {
      */
     public void push(Integer bottle) {
         if (bottle == null) throw new IllegalArgumentException("ขวดน้ำไม่สามารถเป็น null ได้");
-        if (bottles.size() >= capacity) throw new IllegalStateException("ตู้กดน้ำเต็มแล้ว เพิ่มขวดน้ำไม่ได้แล้วนะจ้ะ");
+        if (bottles.size() >= capacity) throw new IllegalArgumentException("ตู้กดน้ำเต็มแล้ว เพิ่มขวดน้ำไม่ได้แล้วนะจ้ะ");
         bottles.add(bottle);
         checkRep();
     }
@@ -76,7 +76,7 @@ public class BoundedStack {
      */
     public Integer pop() {
         if (bottles.isEmpty()) {
-            throw new IllegalStateException("ตู้กดน้ำว่างแล้ว กดมาน้ำก็ไม่ออกจ้า");
+            throw new IllegalArgumentException("ตู้กดน้ำว่างแล้ว กดมาน้ำก็ไม่ออกจ้า");
         }
         Integer bottle = bottles.remove(bottles.size() - 1);
         checkRep();
@@ -91,7 +91,7 @@ public class BoundedStack {
      */
     public Integer peek() {
         if (bottles.isEmpty())
-            throw new IllegalStateException("ตู้กดน้ำว่างแล้ว ไม่มีน้ำให้ดูนะจ้ะ");
+            throw new IllegalArgumentException("ตู้กดน้ำว่างแล้ว ไม่มีน้ำให้ดูนะจ้ะ");
         return bottles.get(bottles.size() - 1);
     }
 
