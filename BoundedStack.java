@@ -59,7 +59,7 @@ public class BoundedStack {
      * 
      * @param bottle ขวดน้ำที่จะเพิ่ม
      * @throws IllegalArgumentException ถ้า bottle เป็น null
-     * @throws IllegalStateException ถ้าตู้กดน้ำเต็มแล้ว
+     * @throws IllegalArgumentException ถ้าตู้กดน้ำเต็มแล้ว
      */
     public void push(Integer bottle) {
         if (bottle == null) throw new IllegalArgumentException("ขวดน้ำไม่สามารถเป็น null ได้");
@@ -72,7 +72,7 @@ public class BoundedStack {
      * Mutator 2 ลบขวดน้ำบนสุดของตู้กดน้ำและคืนค่าของมัน
      * 
      * @return ขวดน้ำบนสุดของตู้กดน้ำ
-     * @throws IllegalStateException ถ้าตู้กดน้ำว่างแล้ว
+     * @throws IllegalArgumentException ถ้าตู้กดน้ำว่างแล้ว
      */
     public Integer pop() {
         if (bottles.isEmpty()) {
@@ -87,7 +87,7 @@ public class BoundedStack {
      * Observer 1 เรียกดูน้ำในตู้กดน้ำ (จำนวนขวดน้ำที่เก็บอยู่)
      * 
      * @return ขนาดของตู้กดน้ำ
-     * @throws IllegalStateException ถ้าตู้กดน้ำว่าง
+     * @throws IllegalArgumentException ถ้าตู้กดน้ำว่าง
      */
     public Integer peek() {
         if (bottles.isEmpty())
