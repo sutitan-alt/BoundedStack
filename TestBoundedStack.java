@@ -24,12 +24,12 @@ System.out.println("testBoundedStack");
      * 
      */
     
-    BoundedStack bottles = new BoundedStack(20);
-    int capacity = 1;
-    bottles.push(1);   
+    int capacity = 20;
+    BoundedStack bottles = new BoundedStack(capacity);
+    bottles.push(1);    
         check("bottles !=null",bottles!=null);// ในตู้น้ำจะต้องมีขวดน้ำ 
-        check("capacity must be greater than 0 and not exceed MAX_BOTTLES", true); // ค่าความจุจะต้องมากกว่า 0 และไม่เกินค่าสูงสุดของขวดน้ำ
-        check("The number of bottles in bottles must not exceed capacity", bottles.size()<= capacity);// จำนวนขวดน้ำจะต้องไม่มากกว่าค่าความจุ
+        check("capacity ต้องมากกว่า 0 และไม่เกิน MAX_BOTTLES", capacity<=BoundedStack.MAX_BOTTLES); // ค่าความจุจะต้องมากกว่า 0 และไม่เกินค่าสูงสุดของขวดน้ำ
+        check("จำนวนขวดน้ำใน bottles ต้องไม่เกิน capacity", bottles.size()<= capacity);// จำนวนขวดน้ำจะต้องไม่มากกว่าค่าความจุ
         
         
         /***
@@ -39,25 +39,25 @@ System.out.println("testBoundedStack");
          */
         try {
             new BoundedStack(0); // ทดสอบใส่ค่าความจุเป็น 0
-            check("The capacity value must be greater than 0", false); // ค่าความจุเป็น 0 ต้องโยน Exception
+            check("ค่า capacity ต้องมากกว่า 0", false); // ค่าความจุเป็น 0 ต้องโยน Exception
         } catch (IllegalArgumentException e) {
-            check("The capacity value must be greater than 0", true);
+            check("ค่า capacity ต้องมากกว่า 0", true);
             
         }
         try {
             new BoundedStack(-1);// ทดสอบใส่ค่าความจุเป้นค่าติดลบ
-            check("The capacity value must not be negative", false); // ค่าความจุติดลบ ต้องโยน Exception
+            check("ค่า capacity ต้องไม่ติดลบ", false); // ค่าความจุติดลบ ต้องโยน Exception
         } catch (IllegalArgumentException e) {
-            check("The capacity value must not be negative", true);
+            check("ค่า capacity ต้องไม่ติดลบ", true);
             
         }
 
         try {
             
             new BoundedStack(21); // ทดสอบใส่ค่าความจุเกินค่าสูงสุดของขวดน้ำ
-            check("The capacity value must not exceed MAX_BOTTLES", false); // ค่าความจุเกินค่าสูงสุดของขวดน้ำ ต้องโยน Exception
+            check("ค่า capacity ต้องไม่เกิน MAX_BOTTLES", false); // ค่าความจุเกินค่าสูงสุดของขวดน้ำ ต้องโยน Exception
         } catch (IllegalArgumentException e) {
-            check("The capacity value must not exceed MAX_BOTTLES",true );
+            check("ค่า capacity ต้องไม่เกิน MAX_BOTTLES",true );
             
         }
 
@@ -81,22 +81,22 @@ System.out.println("testBoundedStack");
          * 
          */
         BoundedStack addbottles = new BoundedStack(1);
-        
+        // ทดสอบการเพิ่มขวดน้ำจนเต็มพอดี
         addbottles.push(1); // ใส่ขวดน้ำเข้าไป 
-        check("The water dispenser can be refilled with a bottle",true);
+        check("ตู้กดน้ำสามารถเติมขวดน้ำได้",addbottles.size()==1);
         try {
             addbottles.push(null); //ทดสอบการใส่ขวดน้ำเป็นค่า null
-            check("A bottle cannot be null", false); // ถ้ามีการส่งค่า null ต้องโยน Exception
+            check("ขวดน้ำไม่สามารถเป็น null ได้", false); // ถ้ามีการส่งค่า null ต้องโยน Exception
         } catch (IllegalArgumentException e) {
             
-            check("A bottle cannot be null", true);
+            check("ขวดน้ำไม่สามารถเป็น null ได้", true);
         }
         
         try {
             addbottles.push(2); // ทดสอบการใส่ขวดน้ำเกินค่าความจุ
-            check("The water dispenser cannot be refilled with a bottle", false); // การใส่ขวดน้ำเกินค่าความจุ ต้องโยน Exception
+            check("ตู้กดน้ำไม่สามารถเติมขวดน้ำได้", false); // การใส่ขวดน้ำเกินค่าความจุ ต้องโยน Exception
         } catch (IllegalArgumentException e) {
-            check("The water dispenser cannot be refilled with a bottle", true);
+            check("ตู้กดน้ำไม่สามารถเติมขวดน้ำได้", true);
         }
         /***
          *
@@ -107,15 +107,15 @@ System.out.println("testBoundedStack");
         
         deletebottles.push(1); // ทดสอบการใส่ขวดน้ำเข้าไป
         deletebottles.pop(); // นำขวดน้ำออก
-        check("Remove a bottle from the water dispenser",deletebottles.isEmpty()); // ตรวจสอบว่าไม่มีขวดน้ำในตู้จริง
+        check("นำขวดน้ำออกจากตู้กดน้ำ",deletebottles.isEmpty()); // ตรวจสอบว่าไม่มีขวดน้ำในตู้จริง
 
         //ทดสอบการนำขวดน้ำออกในกรณีที่ไม่มีขวดน้ำให้นำออกแล้ว
 
         try {
             deletebottles.pop(); // ทดสอบการนำขวดน้ำออกแม้ไม่มีขวดน้ำในตู้ 
-            check("There are no bottles left to remove", false); // การนำขวดน้ำออกแม้ไม่มีขวดน้ำในตู้ ต้องโยน Exception
-        } catch (IllegalArgumentException e) {
-            check("There are no bottles left to remove", true);
+            check("ไม่มีขวดน้ำเหลือให้นำออกแล้ว", false); // การนำขวดน้ำออกแม้ไม่มีขวดน้ำในตู้ ต้องโยน Exception
+        } catch (IllegalStateException e) {
+            check("ไม่มีขวดน้ำเหลือให้นำออกแล้ว", true);
             
         }
 
@@ -131,10 +131,10 @@ System.out.println("testBoundedStack");
         peekbottles.push(1); //เพิ่มขวดน้ำขวดที่ 1
         peekbottles.push(2); //เพิ่มขวดน้ำขวดที่ 2
        
-        check("Peeking at a bottle must return the most recently added bottle",peekbottles.peek().equals(2)); //ตรวจสอบว่าขวดน้ำเป็นขวดล่าสุดที่นำเข้าหรือไม่
+        check("เปิดดูขวดน้ำต้องเป็นขวดล่าสุด",peekbottles.peek().equals(2)); //ตรวจสอบว่าขวดน้ำเป็นขวดล่าสุดที่นำเข้าหรือไม่
         
         //ตรวจสอบค่าจำนวนขวดในตู้กดน้ำจะต้องมีค่าเท่าเดิม
-        check("Check the bottle count after peeking", peekbottles.size()==2);
+        check("ตรวจสอบจำนวนขวดน้ำหลังจากการเปิดดู", peekbottles.size()==2);
 
         /***
          * 
@@ -144,15 +144,15 @@ System.out.println("testBoundedStack");
         
         BoundedStack checkbottles = new BoundedStack(1);
         
-        check("The water dispenser is now empty",checkbottles.isEmpty());
+        check("ตอนนี้ตู้กดน้ำว่างแล้ว",checkbottles.isEmpty());
         
         //ทดสอบการดูขวดน้ำ และนำขวดน้ำออก เมื่อตู้ขวดน้ำว่าง
         
         try {
             checkbottles.peek(); // ทดสอบการดูขวดน้ำเมื่อตู้ขวดน้ำว่าง
-            check("Cannot peek at a bottle in an empty dispenser", false); //การดูขวดน้ำเมื่อตู้ขวดน้ำว่าง ต้องโยน Exception
-        } catch (IllegalArgumentException e) {
-            check("Cannot peek at a bottle in an empty dispenser", true);
+            check("ไม่สามารถดูขวดน้ำในตู้ที่ว่างได้", false); //การดูขวดน้ำเมื่อตู้ขวดน้ำว่าง ต้องโยน Exception
+        } catch (IllegalStateException e) {
+            check("ไม่สามารถดูขวดน้ำในตู้ที่ว่างได้", true);
         }
 
         /***
@@ -164,7 +164,7 @@ System.out.println("testBoundedStack");
         
         sizebottles.push(1); //เพิ่มขวดน้ำเข้าไปในตู้
         sizebottles.push(2);
-        check("Check the number of bottles in the dispenser",sizebottles.size()==2); // ตรวจสอบจำนวนขวดน้ำในตู้
+        check("ตรวจสอบจำนวนขวดน้ำในตู้",sizebottles.size()==2); // ตรวจสอบจำนวนขวดน้ำในตู้
         
         
         /*
@@ -178,18 +178,17 @@ System.out.println("testBoundedStack");
         copyBoundedStack.push(1); //เพิ่มขวดน้ำเข้าไปในตู้
         copyBoundedStack.push(2);
         BoundedStack newbottles = copyBoundedStack.copy(); 
-        check("Check that the clone has the same size as the original",newbottles.size()==2); //ตรวจสอบจำนวนของตัวโคลนว่ามีค่าเท่าตัวจริงหรือไม่
         
         //ทดสอบว่าตัวโคลนแต่ละตัวมีค่าเหมือนตัวต้นฉบับทุกตัวหรือไม่
+        check("ตรวจสอบว่าตัวโคลนมีขนาดเท่าตัวเริ่มต้น",newbottles.size()==2); //ตรวจสอบจำนวนของตัวโคลนว่ามีค่าเท่าตัวจริงหรือไม่
+        check("ขวดน้ำในตัวโคลนมีค่าเหมือนกัน",newbottles.peek().equals(2)); // ตรวจสอบขวดน้ำว่าเป็นแบบเดียวกันหรือไม่
         
-        check("The bottles in the clone have the same values",copyBoundedStack.peek().equals(2)); // ตรวจสอบขวดน้ำว่าเป็นแบบเดียวกันหรือไม่
-        copyBoundedStack.pop(); //ลองนำขวดน้ำออกเพื่อดูขวดอื่น
-        check("The other bottles in the clone retain the same values even after a bottle is removed from the (original) dispenser",copyBoundedStack.peek().equals(1)); // ขวดน้ำจะต้องเป็นค่าเดิม
-
+        
         // ทดสอบว่าการเพิ่มขวดน้ำในตู้ใหม่ตู้เก่าจะต้องไม่เปลี่ยน 
-        
         newbottles.push(1); // ทำการเพิ่มขวดเข้าไปในตู้ใหม่
-        check("Check whether the bottles in the old dispenser have changed",  copyBoundedStack.size() != newbottles.size()); // การเพิ่มขวดน้ำในตู้ใหม่ตู้เก่าจะต้องไม่เปลี่ยน 
+        check("ตรวจสอบขวดน้ำในตู้เดิมเป็นขวดเดิมหรือไม่",copyBoundedStack.peek().equals(2)); // ขวดน้ำจะต้องเป็นค่าเดิม
+        check("ตรวจสอบว่าขวดน้ำในตู้เก่าเปลี่ยนแปลงหรือไม่",  copyBoundedStack.size()==2); // การเพิ่มขวดน้ำในตู้ใหม่ตู้เก่าจะต้องไม่เปลี่ยน 
+        
 
         /*
          * 

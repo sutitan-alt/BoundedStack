@@ -45,7 +45,7 @@ public class BoundedStack {
      * @param capacity จำนวนขวดน้ำสูงสุดที่ตู้กดน้ำเก็บได้
      * @throws IllegalArgumentException ถ้า capacity <= 0
      */
-    public BoundedStack(int capacity) {
+    public BoundedStack(Integer capacity) {
         if (capacity <= 0 || capacity > MAX_BOTTLES) {
             throw new IllegalArgumentException("capacity ต้องมากกว่า 0 และไม่เกิน MAX_BOTTLES");
         }
@@ -72,11 +72,11 @@ public class BoundedStack {
      * Mutator 2 ลบขวดน้ำบนสุดของตู้กดน้ำและคืนค่าของมัน
      * 
      * @return ขวดน้ำบนสุดของตู้กดน้ำ
-     * @throws IllegalArgumentException ถ้าตู้กดน้ำว่างแล้ว
+     * @throws IllegalStateException ถ้าตู้กดน้ำว่างแล้ว
      */
     public Integer pop() {
         if (bottles.isEmpty()) {
-            throw new IllegalArgumentException("ตู้กดน้ำว่างแล้ว กดมาน้ำก็ไม่ออกจ้า");
+            throw new IllegalStateException("ตู้กดน้ำว่างแล้ว กดมาน้ำก็ไม่ออกจ้า");
         }
         Integer bottle = bottles.remove(bottles.size() - 1);
         checkRep();
@@ -84,14 +84,14 @@ public class BoundedStack {
     }
 
     /**
-     * Observer 1 เรียกดูน้ำในตู้กดน้ำ (จำนวนขวดน้ำที่เก็บอยู่)
+     * Observer 1 เรียกดูขวดน้ำในตู้กดน้ำ (จำนวนขวดน้ำที่เก็บอยู่)
      * 
      * @return ขนาดของตู้กดน้ำ
-     * @throws IllegalArgumentException ถ้าตู้กดน้ำว่าง
+     * @throws IllegalStateException ถ้าตู้กดน้ำว่าง
      */
     public Integer peek() {
         if (bottles.isEmpty())
-            throw new IllegalArgumentException("ตู้กดน้ำว่างแล้ว ไม่มีน้ำให้ดูนะจ้ะ");
+            throw new IllegalStateException("ตู้กดน้ำว่างแล้ว ไม่มีน้ำให้ดูนะจ้ะ");
         return bottles.get(bottles.size() - 1);
     }
 
@@ -105,7 +105,7 @@ public class BoundedStack {
     }
 
     /**
-     * Observer 3 เช็คว่าตู้น้ำว่างมั้ย
+     * Observer 3 เช็คว่าตู้น้ำว่างหรือไม่
      * 
      * @return true ถ้าตู้น้ำว่าง
      */
