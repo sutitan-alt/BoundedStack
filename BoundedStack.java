@@ -14,7 +14,7 @@ import java.util.List;
  */
 public class BoundedStack {
     public static final int MAX_BOTTLES = 20;
-    private final List<String> bottles;
+    private final List<Integer> bottles;
     private final int capacity;
 
     /**
@@ -34,7 +34,7 @@ public class BoundedStack {
         assert bottles != null : "bottles ต้องไม่เป็นค่าว่าง";
         assert capacity > 0 && capacity <= MAX_BOTTLES : "capacity ต้องมากกว่า 0 และไม่เกิน MAX_BOTTLES";
         assert bottles.size() <= capacity : "จำนวนขวดน้ำใน bottles ต้องไม่เกิน capacity";
-        for (String bottle : bottles) {
+        for (Integer bottle : bottles) {
             assert bottle != null : "ทุกค่าใน bottles ต้องไม่เป็น null";
         }
     }
@@ -61,7 +61,7 @@ public class BoundedStack {
      * @throws IllegalArgumentException ถ้า bottle เป็น null
      * @throws IllegalStateException ถ้าตู้กดน้ำเต็มแล้ว
      */
-    public void push(String bottle) {
+    public void push(Integer bottle) {
         if (bottle == null) throw new IllegalArgumentException("ขวดน้ำไม่สามารถเป็น null ได้");
         if (bottles.size() >= capacity) throw new IllegalStateException("ตู้กดน้ำเต็มแล้ว เพิ่มขวดน้ำไม่ได้แล้วนะจ้ะ");
         bottles.add(bottle);
@@ -74,11 +74,11 @@ public class BoundedStack {
      * @return ขวดน้ำบนสุดของตู้กดน้ำ
      * @throws IllegalStateException ถ้าตู้กดน้ำว่างแล้ว
      */
-    public String pop() {
+    public Integer pop() {
         if (bottles.isEmpty()) {
             throw new IllegalStateException("ตู้กดน้ำว่างแล้ว กดมาน้ำก็ไม่ออกจ้า");
         }
-        String bottle = bottles.remove(bottles.size() - 1);
+        Integer bottle = bottles.remove(bottles.size() - 1);
         checkRep();
         return bottle;
     }
@@ -89,7 +89,7 @@ public class BoundedStack {
      * @return ขนาดของตู้กดน้ำ
      * @throws IllegalStateException ถ้าตู้กดน้ำว่าง
      */
-    public String peek() {
+    public Integer peek() {
         if (bottles.isEmpty())
             throw new IllegalStateException("ตู้กดน้ำว่างแล้ว ไม่มีน้ำให้ดูนะจ้ะ");
         return bottles.get(bottles.size() - 1);
@@ -105,7 +105,7 @@ public class BoundedStack {
     }
 
     /**
-     * Observer 3 เช็คว่าตู้น้ำว่างหรือไม่
+     * Observer 3 เช็คว่าตู้น้ำว่างมั้ย
      * 
      * @return true ถ้าตู้น้ำว่าง
      */
@@ -120,7 +120,7 @@ public class BoundedStack {
      */
     public BoundedStack copy() {
         BoundedStack copy = new BoundedStack(this.capacity);
-        for (String bottle : this.bottles) {
+        for (Integer bottle : this.bottles) {
             copy.push(bottle);
         }
         return copy;
